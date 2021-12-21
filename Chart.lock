@@ -3,4 +3,4 @@ dependencies:
   repository: https://jitsi-contrib.github.io/jitsi-helm/
   version: 1.1.0
 digest: sha256:00271f65c005bb0cb261b6a88cbbc8cb0bbfc8e6376908a85bce0ba40b4082ec
-generated: "2021-12-20T13:49:30.6636608+01:00"
+generated: "2021-12-21T08:13:24.1304587+01:00"

@@ -6,7 +6,16 @@ This is a Helm Chart to deploy [WorkAdventure](https://github.com/thecodingmachi
 
 ### K8S
 
-Get a K8S cluster. For example see https://minikube.sigs.k8s.io/docs/start/
+Get a K8S cluster.
+ - Minikube:  example see https://minikube.sigs.k8s.io/docs/start/
+ - DockerDesktop
+
+Setup ingress controller (see [quick start guide](https://kubernetes.github.io/ingress-nginx/deploy/#quick-start))
+```
+helm upgrade --install ingress-nginx ingress-nginx \
+  --repo https://kubernetes.github.io/ingress-nginx \
+  --namespace ingress-nginx --create-namespace
+```
 
 ### Helm
 
@@ -28,6 +37,18 @@ helm install myrelease .
 By default, Workadventure will respond to https://[play | maps | pusher | uploader | api].workadventure.minikube
 
 You can also start another universe with another map. For example : https://play.workadventure.minikube/_/anyuniverse/gparant.github.io/tcm-client/Demo/demo-v1.json
+
+### Resolve local dns entries
+
+add domains to the hosts file
+```
+# workadventure domains
+127.0.0.1 api.workadventure.minikube
+127.0.0.1 play.workadventure.minikube
+127.0.0.1 maps.workadventure.minikube
+127.0.0.1 pusher.workadventure.minikube
+127.0.0.1 uploader.workadventure.minikube
+```
 
 ### Install workadventure in a specific Git branch 
 
