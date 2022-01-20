@@ -15,6 +15,19 @@ metadata:
     {{- include "workadventure.labels" . | nindent 4 }}
   {{- with .Values.front.ingress.annotations }}
   annotations:
+  {{- if $.Values.basicAuth.user }}
+    # type of authentication
+    nginx.ingress.kubernetes.io/auth-type: basic
+    # name of the secret that contains the user/password definitions
+    nginx.ingress.kubernetes.io/auth-secret: basic-auth
+    # message to display with an appropriate context why the authentication is required
+    nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required.'
+  {{- end }}
+    nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      if ($host = "{{ $.Values.domain }}") {
+          return 308 https://play.{{ $.Values.domain }}$request_uri;
+      }
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
@@ -26,7 +39,7 @@ spec:
     {{- range .Values.front.ingress.tls }}
     - hosts:
         {{- range .hosts }}        
-        {{ $fqdn := printf "%s.%s" . $.Values.domain -}}
+        {{ $fqdn := printf "%s%s" . $.Values.domain -}}
         - {{ $fqdn }}
         {{- end }}
       secretName: {{ .secretName }}
@@ -34,7 +47,7 @@ spec:
   {{- end }}
   rules:
     {{- range .Values.front.ingress.hosts }}
-    {{ $fqdn := printf "%s.%s" .host $.Values.domain -}}
+    {{ $fqdn := printf "%s%s" .host $.Values.domain -}}
     - host: {{ $fqdn }}
       http:
         paths:

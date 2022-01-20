@@ -27,6 +27,11 @@ env:
   jitsiPrivateMode: false
   debugMode: false
 
+# Basic authentication (leave empty for no authentication)
+basicAuth: 
+  user: ""
+  password: ""
+
 #################### workadventure-back ####################
 back:
   name: "back"
@@ -58,7 +63,8 @@ back:
     enabled: true
     useNginx: true
     annotations:
-      # kubernetes.io/tls-acme: "true"
+      cert-manager.io/issuer: "letsencrypt-staging"
+      nginx.ingress.kubernetes.io/enable-cors: "true"
     hosts:
       - host: api # FQDN is computed with this and domain
         paths: [/]
@@ -104,14 +110,18 @@ front:
     enabled: true
     useNginx: true
     annotations:
-      # kubernetes.io/tls-acme: "true"
+      cert-manager.io/issuer: "letsencrypt-staging"
+      nginx.ingress.kubernetes.io/enable-cors: "true"
     hosts:
-      - host: play
+      - host: play.
+        paths: [/]
+      - host: ""
         paths: [/]
     tls:
       - secretName: front-tls
         hosts:
-          - play
+          - play.
+          - ""
   
 #################### workadventure-front ####################
 
@@ -147,7 +157,8 @@ pusher:
     enabled: true
     useNginx: true
     annotations:
-      # kubernetes.io/tls-acme: "true"
+      cert-manager.io/issuer: "letsencrypt-staging"
+      nginx.ingress.kubernetes.io/enable-cors: "true"
     hosts:
       - host: pusher
         paths: [/]
@@ -189,7 +200,8 @@ uploader:
     enabled: true
     useNginx: true
     annotations:
-      # kubernetes.io/tls-acme: "true"
+      cert-manager.io/issuer: "letsencrypt-staging"
+      nginx.ingress.kubernetes.io/enable-cors: "true"
     hosts:
       - host: uploader
         paths: [/]
@@ -231,7 +243,8 @@ maps:
     enabled: true
     useNginx: true
     annotations:
-      # kubernetes.io/tls-acme: "true"
+      cert-manager.io/issuer: "letsencrypt-staging"
+      nginx.ingress.kubernetes.io/enable-cors: "true"
     hosts:
       - host: maps
         paths: [/]
@@ -240,6 +253,49 @@ maps:
         hosts:
           - maps 
 #################### workadventure-maps ####################
+
+#################### icon ####################
+icon:
+  name: "icon"
+  replicaCount: 1
+
+  image:
+    repository: "matthiasluedtke/iconserver"
+    pullPolicy: IfNotPresent
+
+  # Env icon
+  env:
+
+  extraEnvs: 
+    - name: KEY
+      value: value
+
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
+
+  service:
+    type: ClusterIP
+    port: 80
+
+  ingress:
+    enabled: true
+    useNginx: true
+    annotations:
+      cert-manager.io/issuer: "letsencrypt-staging"
+      nginx.ingress.kubernetes.io/enable-cors: "true"
+    hosts:
+      - host: icon
+        paths: [/]
+    tls:
+      - secretName: icon-tls
+        hosts:
+          - icon
+  
+#################### icon ####################
 
 serviceAccount:
   # Specifies whether a service account should be created

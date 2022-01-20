@@ -1,0 +1,85 @@
+jitsi-meet:
+  jvb:
+    publicIP: 127.0.0.1
+  publicURL: http://localhost/
+
+
+# Default values for workadventure.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+image:
+  tag: ""
+
+domain: "hub.domain.com"
+
+# Env
+env:
+  secretKey: "putYourSecretKeyHere"
+  adminApiToken: "123"
+  jitsiIss: ""
+  jitsiUrl: "meet.jit.si"
+  secretJitsiKey: ""
+  jitsiPrivateMode: false
+  debugMode: false
+
+# Basic authentication
+basicAuth: 
+  user: ""
+  password: ""
+
+#################### workadventure-back ####################
+back:
+  ingress:
+    annotations:
+      cert-manager.io/issuer: "letsencrypt-prod"
+#################### workadventure-back ####################
+
+#################### workadventure-front ####################
+front:
+  image:
+    repository: "exnaton/workadventure-front"
+    pullPolicy: Always
+
+  # Env front
+  env:
+    startRoomUniverse: "global"
+
+  ingress:
+    annotations:
+      cert-manager.io/issuer: "letsencrypt-prod"
+#################### workadventure-front ####################
+
+
+#################### workadventure-pusher ####################
+pusher:
+    annotations:
+      cert-manager.io/issuer: "letsencrypt-prod"
+#################### workadventure-pusher ####################
+
+
+#################### workadventure-uploader ####################
+uploader:
+  ingress:
+    annotations:
+      cert-manager.io/issuer: "letsencrypt-prod"
+#################### workadventure-uploader ####################
+
+
+#################### workadventure-maps ####################
+maps:
+  ingress:
+    annotations:
+      cert-manager.io/issuer: "letsencrypt-prod"
+#################### workadventure-maps ####################
+
+#################### icon ####################
+icon:
+  ingress:
+    annotations:
+      cert-manager.io/issuer: "letsencrypt-prod"  
+#################### icon ####################
